@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/danuxguin/daxweb"
 	"net/http"
 )
@@ -14,19 +13,20 @@ func (this *LoginController) Handler(w http.ResponseWriter, r *http.Request) {
 	this.Controller.Init(this, w, r)
 }
 
-func (this *LoginController) Login() {
-	if this.R.Method == "GET" {
-		this.Tpl = "./views/login.html"
-		this.ExecuteTpl()
-	} else if this.R.Method == "POST" {
-		fmt.Fprintf(this.W, "Login----------------------Post")
-	}
-}
-
 func (this *LoginController) Get() {
-	fmt.Fprintf(this.W, "----------------------Get")
+	this.Tpl = "./views/login.html"
+	this.ExecuteTpl()
 }
 
 func (this *LoginController) Post() {
-	fmt.Fprintf(this.W, "----------------------Post")
+	this.Ctx.R.ParseForm()
+	account := this.Ctx.R.FormValue("account")
+	password := this.Ctx.R.FormValue("password")
+
+	this.SetCookie("account", account, 5*60)
+	this.SetCookie("password", password, 5*60)
+
+	if account == "admin" && password == "admin" {
+		http.Redirect(this.Ctx.W, this.Ctx.R, "/", http.StatusFound)
+	}
 }

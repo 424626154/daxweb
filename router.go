@@ -24,7 +24,6 @@ func init() {
 
 func (this *dax) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	head := common.GetHeader(r.URL.Path)
-
 	h, ok := mux[head]
 	if ok {
 		h(w, r)
