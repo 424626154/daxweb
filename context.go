@@ -18,8 +18,6 @@ func (this *Ctx) SetCookie(key string, value string, expires int64) {
 	cookie.Value = value
 	cookie.Expires = time.Unix(time.Now().Unix()+expires, 0)
 
-	this.R.AddCookie(&cookie)
-
 	this.W.Header().Add("Set-Cookie", cookie.String())
 }
 
